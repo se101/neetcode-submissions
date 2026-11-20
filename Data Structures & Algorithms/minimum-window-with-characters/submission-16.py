@@ -1,0 +1,23 @@
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        countT, countS = Counter(t), {}
+        have, need = 0, len(countT)
+        res = ""
+        length = float('inf')
+        left, right = 0, 0
+        while right<len(s):
+            if s[right] in countT:
+                countS[s[right]] = 1+countS.get(s[right],0)
+                if countS[s[right]]==countT[s[right]]:
+                    have+=1
+            while have==need:
+                if (right-left+1)<length:
+                    res = s[left:right+1]
+                    length = right-left+1
+                if s[left] in countS:
+                    countS[s[left]]-=1
+                    if countS[s[left]]<countT[s[left]]:
+                        have-=1
+                left+=1
+            right+=1
+        return res
